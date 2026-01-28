@@ -155,7 +155,7 @@ export function AIGenerator({ onGenerate }: AIGeneratorProps) {
       </Button>
 
       <p className="text-xs text-gray-500 text-center">
-        L'IA va générer une présentation structurée basée sur votre sujet.
+        L&apos;IA va générer une présentation structurée basée sur votre sujet.
       </p>
     </div>
   )

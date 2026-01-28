@@ -55,14 +55,14 @@ export default function Home() {
             </Card>
           </Link>
 
-          {/* Option 2: Créer avec l'IA */}
+          {/* Option 2: Créer avec l&apos;IA */}
           <Link href="/editor?mode=ai" className="block">
             <Card className="h-full hover:shadow-lg transition-all duration-200 hover:border-purple-300 cursor-pointer group">
               <CardHeader className="text-center pb-2">
                 <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
                   <Sparkles className="w-8 h-8 text-purple-600" />
                 </div>
-                <CardTitle className="text-xl">Créer avec l'IA</CardTitle>
+                <CardTitle className="text-xl">Créer avec l&apos;IA</CardTitle>
                 <CardDescription>
                   Générez une présentation à partir d'un sujet
                 </CardDescription>

@@ -10,7 +10,6 @@ import { ThemeSelector } from '@/components/ThemeSelector'
 import { SlidePreview, SlideList } from '@/components/SlidePreview'
 import { AIGenerator } from '@/components/AIGenerator'
 import { PresentationUploader } from '@/components/PresentationUploader'
-import { slidesToMarkdown } from '@/lib/markdown/parser'
 import { getTheme } from '@/lib/pptx/themes'
 import { Slide, ThemeName, Presentation, Theme } from '@/types/slides'
 import {
@@ -34,7 +33,6 @@ function EditorContent() {
   const [themeName, setThemeName] = useState<ThemeName | string>('corporate')
   const [customThemes, setCustomThemes] = useState<Theme[]>([])
   const [title, setTitle] = useState('Ma Présentation')
-  const [markdown, setMarkdown] = useState('')
   const [selectedSlideIndex, setSelectedSlideIndex] = useState(0)
   const [isExporting, setIsExporting] = useState(false)
   const [mode, setMode] = useState<'ai' | 'import'>(initialMode === 'import' ? 'import' : 'ai')
@@ -51,24 +49,15 @@ function EditorContent() {
     }
   }, [themeName, customThemes])
 
-  const handleSlidesChange = useCallback((newSlides: Slide[]) => {
-    setSlides(newSlides)
-    if (selectedSlideIndex >= newSlides.length) {
-      setSelectedSlideIndex(Math.max(0, newSlides.length - 1))
-    }
-  }, [selectedSlideIndex])
-
   const handleAIGenerate = useCallback((newSlides: Slide[], newTitle: string) => {
     setSlides(newSlides)
     setTitle(newTitle)
-    setMarkdown(slidesToMarkdown(newSlides))
     setSelectedSlideIndex(0)
   }, [])
 
   const handleImport = useCallback((newSlides: Slide[], newTitle: string) => {
     setSlides(newSlides)
     setTitle(newTitle)
-    setMarkdown(slidesToMarkdown(newSlides))
     setSelectedSlideIndex(0)
   }, [])
 
