@@ -130,6 +130,7 @@ export function CustomThemeUploader({ onCustomThemeCreate }: CustomThemeUploader
   }
 
   const fontOptions = [
+    // Polices système
     'Arial',
     'Helvetica',
     'Georgia',
@@ -138,6 +139,35 @@ export function CustomThemeUploader({ onCustomThemeCreate }: CustomThemeUploader
     'Trebuchet MS',
     'Tahoma',
     'Palatino',
+    // Google Fonts - Fun & Display
+    'Luckiest Guy',
+    'Bangers',
+    'Pacifico',
+    'Permanent Marker',
+    'Fredoka One',
+    'Lobster',
+    'Righteous',
+    'Satisfy',
+    // Google Fonts - Modernes
+    'Poppins',
+    'Montserrat',
+    'Raleway',
+    'Roboto',
+    'Open Sans',
+    'Lato',
+    'Inter',
+    'Nunito',
+    'Quicksand',
+    // Google Fonts - Élégantes
+    'Playfair Display',
+    'Merriweather',
+    'Cormorant Garamond',
+    'Libre Baskerville',
+    // Google Fonts - Condensées
+    'Oswald',
+    'Bebas Neue',
+    'Anton',
+    'Barlow Condensed',
   ]
 
   return (
