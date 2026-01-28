@@ -478,6 +478,412 @@ export class PptxGenerator {
     })
   }
 
+  private addStatsSlide(slide: Slide): void {
+    const pptxSlide = this.pptx.addSlide()
+    pptxSlide.background = { color: this.getBackgroundColor() }
+    this.addLogoToSlide(pptxSlide)
+
+    // Title
+    if (slide.title) {
+      pptxSlide.addText(slide.title, {
+        x: 0.5,
+        y: 0.3,
+        w: 9,
+        h: 0.8,
+        fontSize: 32,
+        fontFace: this.theme.fonts.heading,
+        color: this.theme.colors.primary,
+        bold: true,
+        align: 'center',
+      })
+    }
+
+    // Stats cards (up to 4)
+    const stats = slide.elements.slice(0, 4)
+    const cardWidth = 2.1
+    const gap = 0.3
+    const totalWidth = stats.length * cardWidth + (stats.length - 1) * gap
+    const startX = (10 - totalWidth) / 2
+
+    stats.forEach((stat, index) => {
+      const x = startX + index * (cardWidth + gap)
+
+      // Card background
+      pptxSlide.addShape('roundRect', {
+        x,
+        y: 1.5,
+        w: cardWidth,
+        h: 3,
+        fill: { color: this.theme.colors.primary },
+        rectRadius: 0.1,
+      })
+
+      // Big number/stat
+      const parts = stat.content.split('|')
+      const number = parts[0] || stat.content
+      const label = parts[1] || ''
+
+      pptxSlide.addText(number, {
+        x,
+        y: 1.8,
+        w: cardWidth,
+        h: 1.2,
+        fontSize: 36,
+        fontFace: this.theme.fonts.heading,
+        color: '#ffffff',
+        bold: true,
+        align: 'center',
+        valign: 'middle',
+      })
+
+      // Label
+      if (label) {
+        pptxSlide.addText(label, {
+          x,
+          y: 3.2,
+          w: cardWidth,
+          h: 1,
+          fontSize: 14,
+          fontFace: this.theme.fonts.body,
+          color: '#ffffff',
+          align: 'center',
+          valign: 'top',
+        })
+      }
+    })
+  }
+
+  private addCardsSlide(slide: Slide): void {
+    const pptxSlide = this.pptx.addSlide()
+    pptxSlide.background = { color: this.getBackgroundColor() }
+    this.addLogoToSlide(pptxSlide)
+
+    // Title
+    if (slide.title) {
+      pptxSlide.addText(slide.title, {
+        x: 0.5,
+        y: 0.3,
+        w: 9,
+        h: 0.7,
+        fontSize: 28,
+        fontFace: this.theme.fonts.heading,
+        color: this.theme.colors.primary,
+        bold: true,
+        align: 'center',
+      })
+    }
+
+    // Cards (up to 3)
+    const cards = slide.elements.slice(0, 3)
+    const cardWidth = 2.8
+    const gap = 0.4
+    const totalWidth = cards.length * cardWidth + (cards.length - 1) * gap
+    const startX = (10 - totalWidth) / 2
+
+    cards.forEach((card, index) => {
+      const x = startX + index * (cardWidth + gap)
+
+      // Card background
+      pptxSlide.addShape('roundRect', {
+        x,
+        y: 1.2,
+        w: cardWidth,
+        h: 3.8,
+        fill: { color: '#f8fafc' },
+        line: { color: this.theme.colors.muted, width: 1 },
+        rectRadius: 0.15,
+      })
+
+      // Icon circle
+      pptxSlide.addShape('ellipse', {
+        x: x + (cardWidth - 0.8) / 2,
+        y: 1.5,
+        w: 0.8,
+        h: 0.8,
+        fill: { color: this.theme.colors.accent },
+      })
+
+      // Card title and content
+      const parts = card.content.split('|')
+      const cardTitle = parts[0] || ''
+      const cardContent = parts[1] || card.content
+
+      if (cardTitle && parts.length > 1) {
+        pptxSlide.addText(cardTitle, {
+          x,
+          y: 2.5,
+          w: cardWidth,
+          h: 0.5,
+          fontSize: 14,
+          fontFace: this.theme.fonts.heading,
+          color: this.theme.colors.primary,
+          bold: true,
+          align: 'center',
+        })
+
+        pptxSlide.addText(cardContent, {
+          x: x + 0.2,
+          y: 3.1,
+          w: cardWidth - 0.4,
+          h: 1.6,
+          fontSize: 11,
+          fontFace: this.theme.fonts.body,
+          color: this.theme.colors.text,
+          align: 'center',
+          valign: 'top',
+        })
+      } else {
+        pptxSlide.addText(cardContent, {
+          x: x + 0.2,
+          y: 2.5,
+          w: cardWidth - 0.4,
+          h: 2.2,
+          fontSize: 12,
+          fontFace: this.theme.fonts.body,
+          color: this.theme.colors.text,
+          align: 'center',
+          valign: 'top',
+        })
+      }
+    })
+  }
+
+  private addTimelineSlide(slide: Slide): void {
+    const pptxSlide = this.pptx.addSlide()
+    pptxSlide.background = { color: this.getBackgroundColor() }
+    this.addLogoToSlide(pptxSlide)
+
+    // Title
+    if (slide.title) {
+      pptxSlide.addText(slide.title, {
+        x: 0.5,
+        y: 0.3,
+        w: 9,
+        h: 0.7,
+        fontSize: 28,
+        fontFace: this.theme.fonts.heading,
+        color: this.theme.colors.primary,
+        bold: true,
+        align: 'center',
+      })
+    }
+
+    // Timeline line
+    pptxSlide.addShape('rect', {
+      x: 0.8,
+      y: 2.7,
+      w: 8.4,
+      h: 0.05,
+      fill: { color: this.theme.colors.accent },
+    })
+
+    // Timeline items (up to 5)
+    const items = slide.elements.slice(0, 5)
+    const itemWidth = 8.4 / items.length
+
+    items.forEach((item, index) => {
+      const x = 0.8 + index * itemWidth + itemWidth / 2
+
+      // Circle
+      pptxSlide.addShape('ellipse', {
+        x: x - 0.2,
+        y: 2.5,
+        w: 0.4,
+        h: 0.4,
+        fill: { color: this.theme.colors.primary },
+      })
+
+      // Step number
+      pptxSlide.addText(`${index + 1}`, {
+        x: x - 0.2,
+        y: 2.5,
+        w: 0.4,
+        h: 0.4,
+        fontSize: 12,
+        fontFace: this.theme.fonts.heading,
+        color: '#ffffff',
+        bold: true,
+        align: 'center',
+        valign: 'middle',
+      })
+
+      // Content
+      const parts = item.content.split('|')
+      const stepTitle = parts[0] || ''
+      const stepDesc = parts[1] || ''
+
+      pptxSlide.addText(stepTitle, {
+        x: x - itemWidth / 2,
+        y: 3.1,
+        w: itemWidth,
+        h: 0.5,
+        fontSize: 12,
+        fontFace: this.theme.fonts.heading,
+        color: this.theme.colors.primary,
+        bold: true,
+        align: 'center',
+      })
+
+      if (stepDesc) {
+        pptxSlide.addText(stepDesc, {
+          x: x - itemWidth / 2,
+          y: 3.6,
+          w: itemWidth,
+          h: 1.2,
+          fontSize: 10,
+          fontFace: this.theme.fonts.body,
+          color: this.theme.colors.text,
+          align: 'center',
+          valign: 'top',
+        })
+      }
+    })
+  }
+
+  private addComparisonSlide(slide: Slide): void {
+    const pptxSlide = this.pptx.addSlide()
+    pptxSlide.background = { color: this.getBackgroundColor() }
+    this.addLogoToSlide(pptxSlide)
+
+    // Title
+    if (slide.title) {
+      pptxSlide.addText(slide.title, {
+        x: 0.5,
+        y: 0.3,
+        w: 9,
+        h: 0.7,
+        fontSize: 28,
+        fontFace: this.theme.fonts.heading,
+        color: this.theme.colors.primary,
+        bold: true,
+        align: 'center',
+      })
+    }
+
+    // Comparison columns (up to 3)
+    const items = slide.elements.slice(0, 3)
+    const colWidth = items.length === 2 ? 4.2 : 2.8
+    const gap = 0.4
+    const totalWidth = items.length * colWidth + (items.length - 1) * gap
+    const startX = (10 - totalWidth) / 2
+    const colors = [this.theme.colors.primary, this.theme.colors.secondary, this.theme.colors.accent]
+
+    items.forEach((item, index) => {
+      const x = startX + index * (colWidth + gap)
+
+      // Column header
+      pptxSlide.addShape('roundRect', {
+        x,
+        y: 1.2,
+        w: colWidth,
+        h: 0.7,
+        fill: { color: colors[index % colors.length] },
+        rectRadius: 0.1,
+      })
+
+      const parts = item.content.split('|')
+      const colTitle = parts[0] || ''
+      const colItems = parts.slice(1)
+
+      pptxSlide.addText(colTitle, {
+        x,
+        y: 1.2,
+        w: colWidth,
+        h: 0.7,
+        fontSize: 16,
+        fontFace: this.theme.fonts.heading,
+        color: '#ffffff',
+        bold: true,
+        align: 'center',
+        valign: 'middle',
+      })
+
+      // Column content
+      pptxSlide.addShape('roundRect', {
+        x,
+        y: 1.9,
+        w: colWidth,
+        h: 3.2,
+        fill: { color: '#f8fafc' },
+        line: { color: colors[index % colors.length], width: 2 },
+        rectRadius: 0.1,
+      })
+
+      // Column items
+      if (colItems.length > 0) {
+        const bullets = colItems.map(text => ({
+          text: text.trim(),
+          options: {
+            bullet: { type: 'bullet' as const, code: '2713' },
+            fontSize: 12,
+            fontFace: this.theme.fonts.body,
+            color: this.theme.colors.text,
+            paraSpaceAfter: 8,
+          },
+        }))
+
+        pptxSlide.addText(bullets, {
+          x: x + 0.2,
+          y: 2.1,
+          w: colWidth - 0.4,
+          h: 2.8,
+          valign: 'top',
+        })
+      }
+    })
+  }
+
+  private addTableSlide(slide: Slide): void {
+    const pptxSlide = this.pptx.addSlide()
+    pptxSlide.background = { color: this.getBackgroundColor() }
+    this.addLogoToSlide(pptxSlide)
+
+    // Title
+    if (slide.title) {
+      pptxSlide.addText(slide.title, {
+        x: 0.5,
+        y: 0.3,
+        w: 9,
+        h: 0.7,
+        fontSize: 28,
+        fontFace: this.theme.fonts.heading,
+        color: this.theme.colors.primary,
+        bold: true,
+      })
+    }
+
+    // Parse table data from elements
+    const rows: string[][] = slide.elements.map(el =>
+      el.content.split('|').map(cell => cell.trim())
+    )
+
+    if (rows.length > 0) {
+      const tableData: PptxGenJS.TableRow[] = rows.map((row, rowIndex) =>
+        row.map(cell => ({
+          text: cell,
+          options: {
+            fill: rowIndex === 0 ? this.theme.colors.primary : (rowIndex % 2 === 0 ? '#f8fafc' : '#ffffff'),
+            color: rowIndex === 0 ? '#ffffff' : this.theme.colors.text,
+            bold: rowIndex === 0,
+            fontSize: rowIndex === 0 ? 14 : 12,
+            fontFace: rowIndex === 0 ? this.theme.fonts.heading : this.theme.fonts.body,
+            align: 'center' as const,
+            valign: 'middle' as const,
+          },
+        }))
+      )
+
+      pptxSlide.addTable(tableData, {
+        x: 0.5,
+        y: 1.2,
+        w: 9,
+        colW: rows[0] ? 9 / rows[0].length : 3,
+        rowH: 0.5,
+        border: { type: 'solid', pt: 1, color: this.theme.colors.muted },
+      })
+    }
+  }
+
   public addSlide(slide: Slide): void {
     switch (slide.layout) {
       case 'title':
@@ -503,6 +909,21 @@ export class PptxGenerator {
         break
       case 'section':
         this.addSectionSlide(slide)
+        break
+      case 'stats':
+        this.addStatsSlide(slide)
+        break
+      case 'cards':
+        this.addCardsSlide(slide)
+        break
+      case 'timeline':
+        this.addTimelineSlide(slide)
+        break
+      case 'comparison':
+        this.addComparisonSlide(slide)
+        break
+      case 'table':
+        this.addTableSlide(slide)
         break
       default:
         this.addTitleContentSlide(slide)

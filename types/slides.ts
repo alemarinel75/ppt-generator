@@ -9,6 +9,11 @@ export type SlideLayout =
   | 'image-right'     // Image on right, content left
   | 'quote'           // Quote/citation
   | 'section'         // Section/transition slide
+  | 'stats'           // Statistics with big numbers
+  | 'cards'           // 3-4 cards with icons
+  | 'timeline'        // Timeline/process steps
+  | 'comparison'      // Compare 2-3 items
+  | 'table'           // Table layout
 
 export type ThemeName =
   | 'corporate'

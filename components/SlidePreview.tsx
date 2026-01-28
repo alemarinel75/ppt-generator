@@ -52,7 +52,7 @@ export function SlidePreview({
       style={{ backgroundColor: bgColor }}
     >
       <div className="absolute inset-0 p-2 flex flex-col">
-        {renderSlideContent(slide, themeData, fontSizes[size], textColor)}
+        {renderSlideContent(slide, themeData, fontSizes[size], textColor, size)}
       </div>
     </div>
   )
@@ -62,7 +62,8 @@ function renderSlideContent(
   slide: Slide,
   theme: ReturnType<typeof getTheme>,
   fontSize: { title: string; body: string },
-  textColor: string
+  textColor: string,
+  size: 'small' | 'medium' | 'large'
 ) {
   const titleStyle = {
     color: theme.colors.primary,
@@ -198,6 +199,185 @@ function renderSlideContent(
                 <span className="line-clamp-1">{el.content}</span>
               </div>
             ))}
+          </div>
+        </div>
+      )
+
+    case 'stats':
+      return (
+        <div className="h-full">
+          <div
+            className={cn('font-bold mb-2 text-center', fontSize.title)}
+            style={titleStyle}
+          >
+            {slide.title || 'Statistics'}
+          </div>
+          <div className="flex gap-1 justify-center">
+            {slide.elements.slice(0, 4).map((el, i) => {
+              const parts = el.content.split('|')
+              return (
+                <div
+                  key={i}
+                  className="flex-1 rounded p-1 text-center"
+                  style={{ backgroundColor: theme.colors.primary }}
+                >
+                  <div className="text-white font-bold" style={{ fontSize: size === 'large' ? '16px' : '8px' }}>
+                    {parts[0]}
+                  </div>
+                  {parts[1] && (
+                    <div className="text-white/80" style={{ fontSize: size === 'large' ? '8px' : '5px' }}>
+                      {parts[1]}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )
+
+    case 'cards':
+      return (
+        <div className="h-full">
+          <div
+            className={cn('font-bold mb-1 text-center', fontSize.title)}
+            style={titleStyle}
+          >
+            {slide.title || 'Cards'}
+          </div>
+          <div className="flex gap-1 justify-center">
+            {slide.elements.slice(0, 3).map((el, i) => {
+              const parts = el.content.split('|')
+              return (
+                <div
+                  key={i}
+                  className="flex-1 rounded border p-1"
+                  style={{ borderColor: theme.colors.muted, backgroundColor: '#f8fafc' }}
+                >
+                  <div
+                    className="w-3 h-3 rounded-full mx-auto mb-1"
+                    style={{ backgroundColor: theme.colors.accent }}
+                  />
+                  <div className={cn('text-center font-medium', fontSize.body)} style={{ color: theme.colors.primary }}>
+                    {parts[0]}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )
+
+    case 'timeline':
+      return (
+        <div className="h-full">
+          <div
+            className={cn('font-bold mb-2 text-center', fontSize.title)}
+            style={titleStyle}
+          >
+            {slide.title || 'Timeline'}
+          </div>
+          <div className="relative px-2">
+            <div
+              className="absolute left-2 right-2 top-3 h-0.5"
+              style={{ backgroundColor: theme.colors.accent }}
+            />
+            <div className="flex justify-between relative">
+              {slide.elements.slice(0, 4).map((el, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div
+                    className="w-3 h-3 rounded-full flex items-center justify-center text-white"
+                    style={{ backgroundColor: theme.colors.primary, fontSize: '6px' }}
+                  >
+                    {i + 1}
+                  </div>
+                  <div className={cn('mt-1 text-center', fontSize.body)} style={{ color: theme.colors.text }}>
+                    {el.content.split('|')[0]}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+
+    case 'comparison':
+      return (
+        <div className="h-full">
+          <div
+            className={cn('font-bold mb-1 text-center', fontSize.title)}
+            style={titleStyle}
+          >
+            {slide.title || 'Comparison'}
+          </div>
+          <div className="flex gap-1">
+            {slide.elements.slice(0, 3).map((el, i) => {
+              const parts = el.content.split('|')
+              const colors = [theme.colors.primary, theme.colors.secondary, theme.colors.accent]
+              return (
+                <div key={i} className="flex-1">
+                  <div
+                    className="rounded-t px-1 py-0.5 text-white text-center"
+                    style={{ backgroundColor: colors[i], fontSize: size === 'large' ? '10px' : '6px' }}
+                  >
+                    {parts[0]}
+                  </div>
+                  <div
+                    className="rounded-b border-x border-b p-1"
+                    style={{ borderColor: colors[i] }}
+                  >
+                    <div className={fontSize.body} style={{ color: theme.colors.text }}>
+                      {parts.slice(1, 3).map((item, j) => (
+                        <div key={j} className="flex items-center gap-0.5">
+                          <span style={{ color: colors[i] }}>✓</span>
+                          <span className="line-clamp-1">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )
+
+    case 'table':
+      return (
+        <div className="h-full">
+          <div
+            className={cn('font-bold mb-1', fontSize.title)}
+            style={titleStyle}
+          >
+            {slide.title || 'Table'}
+          </div>
+          <div className="border rounded overflow-hidden" style={{ borderColor: theme.colors.muted }}>
+            {slide.elements.slice(0, 4).map((el, i) => {
+              const cells = el.content.split('|')
+              return (
+                <div
+                  key={i}
+                  className="flex"
+                  style={{
+                    backgroundColor: i === 0 ? theme.colors.primary : (i % 2 === 0 ? '#f8fafc' : '#ffffff'),
+                  }}
+                >
+                  {cells.slice(0, 3).map((cell, j) => (
+                    <div
+                      key={j}
+                      className={cn('flex-1 px-1 py-0.5 border-r last:border-r-0', fontSize.body)}
+                      style={{
+                        color: i === 0 ? '#ffffff' : theme.colors.text,
+                        borderColor: theme.colors.muted,
+                        fontWeight: i === 0 ? 'bold' : 'normal',
+                      }}
+                    >
+                      {cell}
+                    </div>
+                  ))}
+                </div>
+              )
+            })}
           </div>
         </div>
       )
