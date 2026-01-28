@@ -858,12 +858,12 @@ export class PptxGenerator {
     )
 
     if (rows.length > 0) {
-      const tableData: PptxGenJS.TableRow[] = rows.map((row, rowIndex) =>
+      const tableData = rows.map((row, rowIndex) =>
         row.map(cell => ({
           text: cell,
           options: {
-            fill: rowIndex === 0 ? this.theme.colors.primary : (rowIndex % 2 === 0 ? '#f8fafc' : '#ffffff'),
-            color: rowIndex === 0 ? '#ffffff' : this.theme.colors.text,
+            fill: { color: rowIndex === 0 ? this.theme.colors.primary : (rowIndex % 2 === 0 ? 'f8fafc' : 'ffffff') },
+            color: rowIndex === 0 ? 'ffffff' : this.theme.colors.text.replace('#', ''),
             bold: rowIndex === 0,
             fontSize: rowIndex === 0 ? 14 : 12,
             fontFace: rowIndex === 0 ? this.theme.fonts.heading : this.theme.fonts.body,
