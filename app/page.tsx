@@ -64,13 +64,13 @@ export default function Home() {
                 </div>
                 <CardTitle className="text-xl">Créer avec l&apos;IA</CardTitle>
                 <CardDescription>
-                  Générez une présentation à partir d'un sujet
+                  Générez une présentation à partir d&apos;un sujet
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center">
                 <ul className="text-sm text-gray-600 space-y-2 mb-6">
                   <li>Décrivez votre sujet</li>
-                  <li>L'IA génère le contenu</li>
+                  <li>L&apos;IA génère le contenu</li>
                   <li>Personnalisez et exportez</li>
                 </ul>
                 <Button variant="outline" className="w-full border-purple-300 text-purple-700 hover:bg-purple-50 group-hover:border-purple-400">
