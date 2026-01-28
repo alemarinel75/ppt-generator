@@ -64,13 +64,19 @@ function renderSlideContent(
   fontSize: { title: string; body: string },
   textColor: string
 ) {
+  const titleStyle = {
+    color: theme.colors.primary,
+    fontFamily: theme.fonts.heading,
+    textTransform: theme.fonts.headingUppercase ? 'uppercase' as const : 'none' as const,
+  }
+
   switch (slide.layout) {
     case 'title':
       return (
         <div className="flex flex-col items-center justify-center h-full text-center">
           <div
             className={cn('font-bold', fontSize.title)}
-            style={{ color: theme.colors.primary }}
+            style={titleStyle}
           >
             {slide.title || 'Title'}
           </div>
@@ -88,7 +94,13 @@ function renderSlideContent(
     case 'section':
       return (
         <div className="flex flex-col items-center justify-center h-full text-center">
-          <div className={cn('font-bold text-white', fontSize.title)}>
+          <div
+            className={cn('font-bold text-white', fontSize.title)}
+            style={{
+              fontFamily: theme.fonts.heading,
+              textTransform: theme.fonts.headingUppercase ? 'uppercase' : 'none',
+            }}
+          >
             {slide.title || 'Section'}
           </div>
           {slide.subtitle && (
@@ -125,7 +137,7 @@ function renderSlideContent(
         <div className="h-full">
           <div
             className={cn('font-bold mb-1', fontSize.title)}
-            style={{ color: theme.colors.primary }}
+            style={titleStyle}
           >
             {slide.title || 'Title'}
           </div>
@@ -172,7 +184,7 @@ function renderSlideContent(
           <div className="flex-1">
             <div
               className={cn('font-bold mb-1', fontSize.title)}
-              style={{ color: theme.colors.primary }}
+              style={titleStyle}
             >
               {slide.title || 'Title'}
             </div>
@@ -195,7 +207,7 @@ function renderSlideContent(
         <div className="h-full">
           <div
             className={cn('font-bold mb-1', fontSize.title)}
-            style={{ color: theme.colors.primary }}
+            style={titleStyle}
           >
             {slide.title || 'Title'}
           </div>

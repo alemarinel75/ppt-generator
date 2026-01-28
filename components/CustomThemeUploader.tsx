@@ -35,6 +35,7 @@ export function CustomThemeUploader({ onCustomThemeCreate }: CustomThemeUploader
   const [fonts, setFonts] = useState({
     heading: 'Arial',
     body: 'Arial',
+    headingUppercase: false,
   })
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -126,7 +127,7 @@ export function CustomThemeUploader({ onCustomThemeCreate }: CustomThemeUploader
       accent: '#3b82f6',
       muted: '#6b7280',
     })
-    setFonts({ heading: 'Arial', body: 'Arial' })
+    setFonts({ heading: 'Arial', body: 'Arial', headingUppercase: false })
   }
 
   const fontOptions = [
@@ -304,6 +305,18 @@ export function CustomThemeUploader({ onCustomThemeCreate }: CustomThemeUploader
                 </select>
               </div>
             </div>
+            <div className="flex items-center gap-3 mt-3">
+              <input
+                type="checkbox"
+                id="headingUppercase"
+                checked={fonts.headingUppercase}
+                onChange={(e) => setFonts(prev => ({ ...prev, headingUppercase: e.target.checked }))}
+                className="w-4 h-4 rounded border-gray-300"
+              />
+              <Label htmlFor="headingUppercase" className="text-sm cursor-pointer">
+                Titres en MAJUSCULES
+              </Label>
+            </div>
           </div>
 
           {/* Preview */}
@@ -320,7 +333,11 @@ export function CustomThemeUploader({ onCustomThemeCreate }: CustomThemeUploader
                   )}
                   <h3
                     className="text-lg font-bold"
-                    style={{ color: colors.primary, fontFamily: fonts.heading }}
+                    style={{
+                      color: colors.primary,
+                      fontFamily: fonts.heading,
+                      textTransform: fonts.headingUppercase ? 'uppercase' : 'none'
+                    }}
                   >
                     {themeName || 'Titre de la présentation'}
                   </h3>

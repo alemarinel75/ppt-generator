@@ -54,6 +54,7 @@ export interface ThemeColors {
 export interface ThemeFonts {
   heading: string
   body: string
+  headingUppercase?: boolean
 }
 
 export interface Theme {
