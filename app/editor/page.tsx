@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo, Suspense } from 'react'
+import { useState, useCallback, useMemo, Suspense, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -36,6 +36,39 @@ function EditorContent() {
   const [selectedSlideIndex, setSelectedSlideIndex] = useState(0)
   const [isExporting, setIsExporting] = useState(false)
   const [mode, setMode] = useState<'ai' | 'import'>(initialMode === 'import' ? 'import' : 'ai')
+
+  // Charger les thèmes personnalisés depuis localStorage au démarrage
+  useEffect(() => {
+    const savedThemes = localStorage.getItem('ppt-custom-themes')
+    const savedSelectedTheme = localStorage.getItem('ppt-selected-theme')
+
+    if (savedThemes) {
+      try {
+        const parsed = JSON.parse(savedThemes)
+        setCustomThemes(parsed)
+      } catch (e) {
+        console.error('Erreur lors du chargement des thèmes:', e)
+      }
+    }
+
+    if (savedSelectedTheme) {
+      setThemeName(savedSelectedTheme)
+    }
+  }, [])
+
+  // Sauvegarder les thèmes personnalisés dans localStorage
+  useEffect(() => {
+    if (customThemes.length > 0) {
+      localStorage.setItem('ppt-custom-themes', JSON.stringify(customThemes))
+    } else {
+      localStorage.removeItem('ppt-custom-themes')
+    }
+  }, [customThemes])
+
+  // Sauvegarder le thème sélectionné
+  useEffect(() => {
+    localStorage.setItem('ppt-selected-theme', themeName)
+  }, [themeName])
 
   // Get the current theme object
   const currentTheme = useMemo(() => {
