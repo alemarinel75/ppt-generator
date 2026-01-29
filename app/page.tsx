@@ -3,16 +3,48 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
-import { Upload, Sparkles, Presentation, ArrowRight } from 'lucide-react'
+import { Upload, Sparkles, Presentation, ArrowRight, LogIn, UserPlus } from 'lucide-react'
+import { useAuth } from '@/lib/supabase/auth-context'
 
 export default function Home() {
+  const { user, loading } = useAuth()
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
-        <div className="flex items-center gap-2">
-          <Presentation className="w-8 h-8 text-blue-600" />
-          <span className="text-xl font-bold">PPT Generator</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Presentation className="w-8 h-8 text-blue-600" />
+            <span className="text-xl font-bold">PPT Generator</span>
+          </div>
+          <div className="flex items-center gap-3">
+            {loading ? (
+              <div className="w-20 h-9 bg-gray-200 animate-pulse rounded-md" />
+            ) : user ? (
+              <Link href="/dashboard">
+                <Button>
+                  Mon tableau de bord
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/auth/login">
+                  <Button variant="ghost">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Connexion
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button>
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Créer un compte
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -30,7 +62,7 @@ export default function Home() {
 
         <div className="grid md:grid-cols-2 gap-6 w-full max-w-3xl">
           {/* Option 1: Améliorer un document */}
-          <Link href="/editor?mode=import" className="block">
+          <Link href={user ? "/editor?mode=import" : "/auth/login?redirectTo=/editor?mode=import"} className="block">
             <Card className="h-full hover:shadow-lg transition-all duration-200 hover:border-blue-300 cursor-pointer group">
               <CardHeader className="text-center pb-2">
                 <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
@@ -55,8 +87,8 @@ export default function Home() {
             </Card>
           </Link>
 
-          {/* Option 2: Créer avec l&apos;IA */}
-          <Link href="/editor?mode=ai" className="block">
+          {/* Option 2: Créer avec l'IA */}
+          <Link href={user ? "/editor?mode=ai" : "/auth/login?redirectTo=/editor?mode=ai"} className="block">
             <Card className="h-full hover:shadow-lg transition-all duration-200 hover:border-purple-300 cursor-pointer group">
               <CardHeader className="text-center pb-2">
                 <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
@@ -81,6 +113,29 @@ export default function Home() {
             </Card>
           </Link>
         </div>
+
+        {/* Features */}
+        {!user && (
+          <div className="mt-16 text-center">
+            <p className="text-sm text-gray-500 mb-4">
+              Créez un compte gratuit pour sauvegarder vos présentations et chartes graphiques
+            </p>
+            <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full" />
+                Sauvegarde cloud
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full" />
+                Chartes illimitées
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full" />
+                100% gratuit
+              </span>
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
