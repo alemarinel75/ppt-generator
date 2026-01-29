@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -27,20 +27,15 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
-  useEffect(() => {
-    if (user) {
-      loadData()
-    }
-  }, [user])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
+    if (!user) return
     setLoading(true)
 
     // Load presentations
     const { data: presentationsData } = await supabase
       .from('presentations')
       .select('*')
-      .eq('user_id', user!.id)
+      .eq('user_id', user.id)
       .order('updated_at', { ascending: false })
 
     if (presentationsData) {
@@ -51,7 +46,7 @@ export default function DashboardPage() {
     const { data: guidelinesData } = await supabase
       .from('brand_guidelines')
       .select('*')
-      .eq('user_id', user!.id)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
     if (guidelinesData) {
@@ -59,7 +54,13 @@ export default function DashboardPage() {
     }
 
     setLoading(false)
-  }
+  }, [user, supabase])
+
+  useEffect(() => {
+    if (user) {
+      loadData()
+    }
+  }, [user, loadData])
 
   const handleSignOut = async () => {
     await signOut()
